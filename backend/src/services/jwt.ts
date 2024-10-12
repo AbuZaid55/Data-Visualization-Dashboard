@@ -15,7 +15,8 @@ class JWTService {
     } 
     public static decondeToken (token:string){ 
         try {
-            return JWT.verify(token,JWT_SECRET) as JWTUser
+            const userData = JWT.verify(token,JWT_SECRET) as JWTUser
+            return {...userData,token:token}
         } catch (error) {
             return null;
         }

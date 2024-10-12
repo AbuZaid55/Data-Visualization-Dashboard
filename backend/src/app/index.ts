@@ -3,6 +3,7 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { data } from './data';
 import {user} from './user'
+import JWTService from '../services/jwt';
 
 export async function initServer() {
     const app = express();
@@ -31,6 +32,12 @@ export async function initServer() {
     });
 
     await graphqlServer.start();
-    app.use("/graphql", expressMiddleware(graphqlServer));
+    app.use("/graphql", expressMiddleware(graphqlServer,{
+        context:async({req,res})=>{
+            return {
+                user:req.headers.authorization?JWTService.decondeToken(req.headers.authorization.split("Bearer ")[1]):undefined
+            }
+        }
+    }));
     return app;
 }
