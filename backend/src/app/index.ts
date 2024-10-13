@@ -4,10 +4,17 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { data } from './data';
 import {user} from './user'
 import JWTService from '../services/jwt';
+import cors from 'cors'
+
+const FRONTEND_URL= process.env.FRONTEND_URL || ''
 
 export async function initServer() {
     const app = express();
     app.use(express.json())
+    app.use(cors({
+        origin:[FRONTEND_URL],
+        credentials:true
+    }))
     const graphqlServer = new ApolloServer({
         typeDefs: `#graphql
             ${data.types}

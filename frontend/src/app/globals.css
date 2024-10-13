@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+input:focus ~ label,input:valid ~ label   {
+  top: -17px;
+  background-color: white;
+  color: #159eee;
+  font-size: 15px;
+}
+input:focus, input:valid{
+  border-color: #159eee;
+}
+label{
+  transition: all;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.1s;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow:0 0 0 50px white inset;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 50px white inset;
+}

@@ -2,7 +2,7 @@ export interface SignUpPayload{
     name:string
     email:string
     password:string
-    confirm_pass:string
+    confirmPass:string
 }
 export interface LogInPayload{
     email:string

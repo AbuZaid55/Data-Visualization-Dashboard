@@ -3,14 +3,14 @@ import { prisma } from '../db'
 import { LogInPayload, SignUpPayload } from '../interfaces'
 import JWTService from '../services/jwt'
 export async function SignUp (data:SignUpPayload){
-    const {name,email,password, confirm_pass} = data
-    if(!name || !email || !password || !confirm_pass){
+    const {name,email,password, confirmPass} = data
+    if(!name || !email || !password || !confirmPass){
         throw new Error("All field are required!")
     }
     if(password.length<8){
         throw new Error("Password should be minimum of 8 characters")
     }
-    if(password!==confirm_pass){
+    if(password!==confirmPass){
         throw new Error("Password doesn't match!")
     }
     const salt = await bcrypt.genSalt(10)
