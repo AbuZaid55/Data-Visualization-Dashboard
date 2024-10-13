@@ -46,3 +46,18 @@ input:-webkit-autofill {
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 50px white inset;
 }
+input[type="date"]{
+  background-color: #344563;
+  padding: 15px;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  margin: 15px;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-color: #ffffff;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}

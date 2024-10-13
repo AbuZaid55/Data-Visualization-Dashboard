@@ -15,8 +15,9 @@ export async function GetData() {
   const data: any = [];
   rows?.map((row, i) => {
     if (i !== 0) {
+      const day = (rows[i][0]).split("/")
       data.push({
-        day: rows[i][0],
+        day: `${day[0]}/${day[1]}/2024`,
         age: rows[i][1],
         gender: rows[i][2],
         a: rows[i][3],

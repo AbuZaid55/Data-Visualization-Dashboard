@@ -1,7 +1,7 @@
 import { graphql } from "../../../gql";
 export const LogIn = graphql(`
   #graphql
-  query Query($email: String!, $password: String!) {
+  query logIn($email: String!, $password: String!) {
     logIn(email: $email, password: $password) {
       id
       name
