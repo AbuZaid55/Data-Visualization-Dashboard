@@ -6,10 +6,10 @@ import { graphqlClient } from '@/client/graphqlClient'
 import { LogIn } from '@/graphql/queries/user'
 import { useRouter } from 'next/navigation'
 
-const page = () => {
+const Page = () => {
   const router = useRouter()
   const [input,setInput] = useState({email:'',password:''})
-  const submitForm = useCallback(async(e:any)=>{
+  const submitForm = useCallback(async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
     try {
       const data = await graphqlClient.request(LogIn,input)
@@ -40,10 +40,10 @@ const page = () => {
 
         <button type='submit' className='w-full py-3 bg-[#344563] text-white rounded-lg mt-2'>Log In</button>
 
-        <p className='text-center mt-3 text-lg text-[#737787]'>Don't have an account? <Link className='text-[#159eee]' href="/signup">Sing Up</Link></p>
+        <p className='text-center mt-3 text-lg text-[#737787]'>Don&apos;t have an account? <Link className='text-[#159eee]' href="/signup">Sing Up</Link></p>
       </form>
     </div>
   )
 }
 
-export default page
+export default Page

@@ -13,27 +13,43 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const Charts = ({ barChartData, filteredData }: { barChartData: any; filteredData: any }) => {
-  const [selectedFeature, setSelectedFeature] = useState('');
-  const [lineChartData,setLineChartData]=useState([])
+interface Data {
+  day:string,
+  age:string,
+  gender:string,
+  a:string,
+  b:string,
+  c:string,
+  d:string,
+  e:string,
+  f:string,
+}
 
-  const handleBarClick = (feature: any) => {
+const Charts = ({ barChartData, filteredData }: { barChartData: {feature:string,total:number}[]; filteredData: Data[] }) => {
+  const [selectedFeature, setSelectedFeature] = useState<keyof Data>('a');
+  const [lineChartData,setLineChartData]=useState<{day:string,[key:string]:string}[]>([])
+  const [showLineChart,setShowLineChart]=useState<boolean>(false)
+
+  const handleBarClick = (feature: keyof Data | undefined) => {
+    if(feature===undefined) return;
     setSelectedFeature(feature);
+    setShowLineChart(true)
   };
   useEffect(()=>{
+    if(!showLineChart) return;
     const date:string[] = []
-    filteredData.map((item:any)=>{
+    filteredData.map((item:Data)=>{
       if(!date.includes(item.day)){
         date.push(item.day)
       }
     })
-    const _lineChartData = date.map((day)=>{
+    const _lineChartData = date.map((day:string)=>{
       return {
         day:day,
-        [selectedFeature]:filteredData.reduce((acc:number,curr:any)=>curr.day===day?acc+Number(curr[selectedFeature]):acc+0,0)
+        [selectedFeature]:filteredData.reduce((acc:number,curr:Data)=>curr.day===day?acc+Number(curr[selectedFeature]):acc+0,0)
       }
     })
-    setLineChartData(_lineChartData as any)
+    setLineChartData(_lineChartData as {day:string,[key:string]:string}[])
   },[filteredData,barChartData,selectedFeature])
 
   return (
@@ -45,7 +61,7 @@ const Charts = ({ barChartData, filteredData }: { barChartData: any; filteredDat
           layout="vertical"
           data={barChartData}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-          onClick={(data) => handleBarClick(data.activeLabel)}
+          onClick={(data) => handleBarClick(data.activeLabel as keyof Data)}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" /> 
@@ -57,7 +73,7 @@ const Charts = ({ barChartData, filteredData }: { barChartData: any; filteredDat
       </ResponsiveContainer>
 
       {/* Line Chart */}
-      {selectedFeature && (
+      {lineChartData.length!==0 && (
         <div>
           <h2 className="text-center text-2xl font-semibold text-[#344563] mt-10">Time Trend for {selectedFeature.toUpperCase()}</h2>
           <ResponsiveContainer width="100%" height={300}>

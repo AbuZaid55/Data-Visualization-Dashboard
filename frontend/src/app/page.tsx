@@ -8,16 +8,34 @@ import Charts from "./components/Charts";
 import { useSearchParams } from "next/navigation";
 import { GetData } from "@/graphql/queries/data";
 
+interface Data {
+  day:string,
+  age:string,
+  gender:string,
+  a:string,
+  b:string,
+  c:string,
+  d:string,
+  e:string,
+  f:string,
+}
+interface User {
+  id:string,
+  name:string,
+  email:string,
+  token:string
+}
+
 export default function Home() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const featureKeys = ['a', 'b', 'c', 'd', 'e', 'f'];
   const [filter,setFilter]=useState({from:"",to:"",age:"",gender:""})
-  const [data,setData]=useState([])
-  const [filterdData,setFilteredData]=useState([])
+  const [data,setData]=useState<Data[]>([])
+  const [filterdData,setFilteredData]=useState<Data[]>([])
   const [showCustomFilter,setShowCustomFilter]=useState(false)
-  const [user,setUser]=useState(null)
-  const [showSidebar,setShowSidebar]=useState(false)
+  const [user,setUser]=useState<User | null>(null)
+  const [showSidebar,setShowSidebar]=useState<boolean>(false)
 
   const formatDate = (date:Date) => {
     const day = String(date.getDate()).padStart(2, '0');
@@ -25,7 +43,7 @@ export default function Home() {
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   };
-  const handleCustomInput = (e:any)=>{
+  const handleCustomInput = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)=>{
     const params = new URLSearchParams(searchParams);
     const key = e.target.name
     params.set(key,e.target.value);
@@ -37,7 +55,6 @@ export default function Home() {
       total: filterdData.reduce((acc, cur:any) => acc + parseInt(cur[key]), 0),
     };
   });
-
   useEffect(()=>{
     (async()=>{
       try {
@@ -45,7 +62,7 @@ export default function Home() {
         if(!data || !data.getUser || !data.getUser.token){
           router.push('/login')
         }else{
-          setUser(data?.getUser as any)
+          setUser(data?.getUser as User)
         }
       } catch (error:any) {
         console.log(error)
@@ -97,8 +114,9 @@ export default function Home() {
     (async()=>{
       if(!user) return;
       try {
-        const _data = await graphqlClient.request(GetData)
-        setData(_data?.getData as any)
+        const response = await graphqlClient.request(GetData)
+        const _data = response.getData as Data[]
+        setData(_data)
       } catch (error) {
         console.log(error)
       }
@@ -106,13 +124,13 @@ export default function Home() {
   },[user])
   useEffect(()=>{
     if(!filter.from || !filter.to) return;
-    const _filteredData = data.filter((item:any)=>{
+    const _filteredData = data.filter((item:Data)=>{
       const itemDate = new Date(item.day.split('/').reverse().join('-'));
       if(itemDate>=new Date(filter.from) && itemDate<=new Date(filter.to) && item.age.includes(filter.age) && item.gender.includes(filter.gender)){
         return item
       }
     })
-    setFilteredData(_filteredData)
+    setFilteredData(_filteredData as Data[])
   },[filter,data])
   return (
     <div className="relative">

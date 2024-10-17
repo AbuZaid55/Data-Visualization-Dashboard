@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-const page = () => {
+const Page = () => {
   const router = useRouter()
   const [input,setInput] = useState({name:'',email:'',password:'',confirmPass:''}) 
   const handleInput = (e:any)=>{
     setInput({...input,[e.target.name]:e.target.value}) 
   }
-  const submitForm = useCallback(async(e:any) => {
+  const submitForm = useCallback(async(e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       const data= await graphqlClient.request(SignUp,input)
@@ -56,4 +56,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

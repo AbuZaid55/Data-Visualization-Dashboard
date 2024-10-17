@@ -1,7 +1,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-const Sidebar = ({showSidebar,setShowSidebar}:{showSidebar:boolean,setShowSidebar:any}) => {
+const Sidebar = ({showSidebar,setShowSidebar}:{showSidebar:boolean,setShowSidebar:React.Dispatch<React.SetStateAction<boolean>>}) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [filter,setFilter]=useState("today")
